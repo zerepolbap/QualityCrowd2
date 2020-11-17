@@ -29,7 +29,7 @@ class Main extends Base
 		if ($restart) $this->store->deleteWorker($this->batchId, $this->workerId);
 
 		// compile the batch script
-		$myBatchCompiler = new BatchCompiler($this->batchId);
+		$myBatchCompiler = new BatchCompiler($this->batchId, $this->store->getWorkerCache($this->batchId, $this->workerId));
 		$this->batch = $myBatchCompiler->getBatch();
 	}
 

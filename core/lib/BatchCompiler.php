@@ -4,6 +4,7 @@ class BatchCompiler extends Base
 {
 	private $batchId;
 	private $source;
+	private $cacheFile;
 
 	public static $syntax = array(
 		// special commands
@@ -151,9 +152,10 @@ class BatchCompiler extends Base
 			),
 		);
 
-	public function __construct($batchId) 
+	public function __construct($batchId, $cacheFile = "") 
 	{
 		$this->batchId = $batchId;
+		$this->cacheFile = $cacheFile;
 	}
 
 	public function getSource() 
@@ -417,6 +419,9 @@ EOT;
 		// find list definitions
 		$lists = $this->extractBlock($source, 'list');
 		
+		// find random list definitions
+		$random = $this->extractBlock($source, 'random');
+		
 		// find for loops
 		$forloops = $this->extractBlock($source, 'for');
 		//header("Content-Type: text/plain; charset=utf8");
@@ -427,9 +432,17 @@ EOT;
 		foreach($forloops as $loop) {
 			// find matching list
 			$myList = null;
+			$randomize = false;
 			foreach($lists as $list) {
 				if ($list['arguments'][0] == $loop['arguments'][2]) {
 					$myList = $list['content'];
+					break;
+				}
+			}
+			foreach($random as $list) {
+				if ($list['arguments'][0] == $loop['arguments'][2]) {
+					$myList = $list['content'];
+					shuffle($myList);
 					break;
 				}
 			}
@@ -561,6 +574,8 @@ EOT;
 
 	private function getCacheFileName()
 	{
+		if ($this->cacheFile != "")
+			return $this->cacheFile;
 		return TMP_PATH . 'batch-cache' . DS . $this->batchId . '.txt';
 	}
 }

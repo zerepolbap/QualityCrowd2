@@ -4,6 +4,12 @@ require(ROOT_PATH.'core'.DS.'lib'.DS.'fstools.php');
 
 class DataStore extends Base
 {
+	public function getWorkerCache($batchId, $workerId)
+	{
+		$path = $this->getDataPath('worker', $batchId, $workerId, true);
+		return $path . DS. 'cache.txt';
+	}
+
 	public function writeWorker($key, $data, $batchId, $workerId)
 	{
 		$path = $this->getDataPath('worker', $batchId, $workerId, true);

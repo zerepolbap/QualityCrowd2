@@ -28,6 +28,13 @@ Lines starting with a number sign (#) are comments and removed before parsing.
 		<...>
 	end list
 
+#### randomized (shuffle) list
+        random <list name>
+                <item 1>
+                <item 2>
+                <...>
+        end random
+
 ### for loop
 	for <val> in <list name>
 		<commands using $<val>>
